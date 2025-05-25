@@ -9,7 +9,12 @@
 bool btn_state;
 
 void setup() {
-  pinMode(FS1000A_DATA_PIN, OUTPUT);
+Serial.begin(9600);
+pinMode(FS1000A_DATA_PIN, OUTPUT);
+//this line will have to be tweaked based on your button setup: pinMode (Button1, INPUT);
+vw_set_tx_pin(12); 
+vw_setup(4000);// speed of data transfer in bps, can max out at 10000
+  
 }
 
 void sendhexdigit(char c, uint16_t pulse){
@@ -171,24 +176,27 @@ void loop() {
   if(btn_state == LOW){
     digitalWrite(LEDyellow, HIGH);
 
-  for (i = 0; i<sizeof(sequence1); i++)
-  {
-    sendhexdigit(sequence1[i], pulse);
-  }
+    for (i = 0; i<sizeof(sequence1); i++)
+    {
+      sendhexdigit(sequence1[i], pulse);
+    }
 
-  delayMicroseconds(15603);
+    delayMicroseconds(15603);
 
-  for (j = 0; j<12; j++)
-  {
-
-  for (i = 0; i<sizeof(sequence2); i++) 
-  {
-    sendhexdigit(sequence2[i], pulse);
-  }
-  delayMicroseconds(15519);
-  }
-  delay(2000);
-  } else {
-    digitalWrite(LEDyellow, LOW);
-  }
+    for (j = 0; j<12; j++)
+    {
+  
+        for (i = 0; i<sizeof(sequence2); i++) 
+        {
+          sendhexdigit(sequence2[i], pulse);
+        }
+        delayMicroseconds(15519);
+    }
+    delay(2000);
+    } 
+    
+    else {
+      digitalWrite(LEDyellow, LOW);
+      delay(2000);
+    }
 }
